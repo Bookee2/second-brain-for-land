@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Second Brain for Land Deals</title>
+<meta name="description" content="How an Obsidian second brain, paired with an AI assistant, helps anyone remember what they learn — and how it fits a timber-and-land business that buys timbered tracts, harvests, and sells off plots.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Public+Sans:wght@400;500;650&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f1e8; --panel:#fffdf8; --sunk:#ece6d8; --line:#d9d1bf;
+  --ink:#1f2a22; --ink-2:#4a554c; --ink-3:#6f776f;
+  --pine:#2f5d3a; --pine-soft:#e1ebdf; --rust:#a4532b; --rust-soft:#f4e4d8;
+  --shadow:0 1px 2px rgba(40,35,20,.06),0 8px 24px rgba(40,35,20,.06);
+  --r-sm:6px; --r:12px; color-scheme:light;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#141a16; --panel:#1b231e; --sunk:#111613; --line:#2c3830;
+  --ink:#e8e6dd; --ink-2:#b9bdb3; --ink-3:#8c948b;
+  --pine:#8cc79a; --pine-soft:#1f3326; --rust:#e39a6f; --rust-soft:#3a2619;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#141a16; --panel:#1b231e; --sunk:#111613; --line:#2c3830;
+  --ink:#e8e6dd; --ink-2:#b9bdb3; --ink-3:#8c948b;
+  --pine:#8cc79a; --pine-soft:#1f3326; --rust:#e39a6f; --rust-soft:#3a2619;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.65 var(--sans)}
+a{color:var(--pine);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--rust);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+@media (min-width:720px){.wrap{padding:0 32px}}
+h1,h2,h3{font-family:var(--serif);font-weight:650;line-height:1.15;letter-spacing:-.01em;margin:0}
+h1{font-size:clamp(2.3rem,6vw,4rem)}
+h2{font-size:clamp(1.65rem,3.6vw,2.4rem);margin-bottom:.6rem}
+h3{font-size:1.2rem;font-weight:500;margin-bottom:.35rem}
+p{margin:0 0 1rem}
+.lead{font-size:1.2rem;color:var(--ink-2);max-width:40rem}
+.kicker{font:500 .78rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rust);margin-bottom:.9rem}
+section{padding:72px 0;border-top:1px solid var(--line)}
+section.first{border-top:0}
+.muted{color:var(--ink-2)}
+
+/* header */
+header.top{padding:18px 0}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font:500 .9rem var(--mono);color:var(--ink-2);text-decoration:none}
+.btn{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:0 18px;border-radius:var(--r-sm);font:650 .95rem var(--sans);text-decoration:none;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:var(--pine);color:var(--paper)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{border-color:var(--line);color:var(--ink);background:var(--panel)}
+.btn-ghost:hover{border-color:var(--ink-3)}
+.theme-toggle{min-height:44px;min-width:44px;border:1px solid var(--line);background:var(--panel);color:var(--ink-2);border-radius:var(--r-sm);font:500 .8rem var(--mono);padding:0 12px;cursor:pointer}
+
+/* hero */
+.hero{padding-top:40px;padding-bottom:72px}
+.hero h1 em{font-style:italic;color:var(--pine)}
+.hero .lead{margin-top:1.2rem}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.8rem}
+
+/* grids */
+.grid{display:grid;gap:16px}
+@media (min-width:720px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.card p:last-child{margin-bottom:0}
+.card .n{font:500 .8rem var(--mono);color:var(--rust);display:block;margin-bottom:.5rem}
+
+/* split */
+.split{display:grid;gap:32px;align-items:start}
+@media (min-width:860px){.split{grid-template-columns:1fr 1fr;gap:48px}}
+
+/* folder tree */
+.tree{background:var(--sunk);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font:400 .88rem/1.75 var(--mono);color:var(--ink-2);overflow-x:auto;white-space:pre;margin:0}
+@media (max-width:520px){.tree{font-size:.74rem;padding:14px}.tree i{display:none}}
+.tree b{color:var(--ink);font-weight:500}
+.tree i{color:var(--ink-3);font-style:normal}
+
+/* note mock */
+.note{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.note-bar{display:flex;gap:6px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--sunk);font:500 .78rem var(--mono);color:var(--ink-3)}
+.note-bar span{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.note-body{padding:18px 20px;font-size:.95rem}
+.note-body h4{font-family:var(--serif);font-size:1.25rem;font-weight:650;margin:0 0 .6rem}
+.note-body .meta{font:400 .78rem/1.6 var(--mono);color:var(--ink-3);margin-bottom:.9rem}
+.note-body ul{margin:0 0 .8rem;padding-left:1.1rem}
+.note-body li{margin-bottom:.25rem}
+.wl{color:var(--pine);background:var(--pine-soft);border-radius:4px;padding:0 4px;white-space:nowrap}
+
+/* lifecycle */
+.flow{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:12px;counter-reset:step}
+@media (min-width:720px){.flow{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1000px){.flow{grid-template-columns:repeat(6,1fr)}}
+.flow li{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;position:relative}
+.flow li::before{counter-increment:step;content:"0" counter(step);font:500 .75rem var(--mono);color:var(--rust);display:block;margin-bottom:.35rem}
+.flow h3{font-size:1.05rem;font-weight:650}
+.flow p{font-size:.88rem;color:var(--ink-2);margin:0}
+
+/* Q&A */
+.qa{display:grid;gap:12px;margin-top:24px}
+.q{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--pine);border-radius:var(--r-sm);padding:14px 18px}
+.q strong{display:block;font-weight:650;margin-bottom:.2rem}
+.q span{color:var(--ink-2);font-size:.93rem}
+
+/* steps */
+.steps{counter-reset:s;list-style:none;padding:0;margin:24px 0 0;display:grid;gap:14px}
+.steps li{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+.steps li::before{counter-increment:s;content:counter(s);width:44px;height:44px;border-radius:50%;background:var(--pine-soft);color:var(--pine);display:grid;place-items:center;font:650 1.05rem var(--serif)}
+.steps h3{margin-top:8px}
+.steps p{color:var(--ink-2);margin:0}
+code{font:400 .88em var(--mono);background:var(--sunk);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+
+/* callouts */
+.callout{background:var(--rust-soft);border:1px solid color-mix(in srgb,var(--rust) 30%,transparent);border-radius:var(--r);padding:20px 22px}
+.callout h3{color:var(--rust)}
+.callout ul{margin:.4rem 0 0;padding-left:1.1rem}
+.callout li{margin-bottom:.35rem}
+
+.download{display:grid;gap:20px;align-items:center;background:var(--pine);color:var(--paper);border-radius:var(--r);padding:28px}
+.download h2{color:var(--paper)}
+.download p{color:color-mix(in srgb,var(--paper) 85%,transparent);margin:0}
+.download .btn{background:var(--paper);color:var(--pine)}
+@media (min-width:760px){.download{grid-template-columns:1fr auto;padding:36px 40px}}
+
+footer{padding:40px 0 56px;color:var(--ink-3);font-size:.88rem;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:no-preference){.btn,.theme-toggle{transition:filter .15s,border-color .15s}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">second-brain / land</a>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Switch color theme">Theme</button>
+  </div>
+</header>
+
+<main>
+<div class="wrap hero">
+  <p class="kicker">A field guide for people who learn by doing</p>
+  <h1>Stop re-learning every deal.<br>Give it a <em>second brain</em>.</h1>
+  <p class="lead">A second brain is a folder of plain notes on your own computer that links together and grows every time you use it. Pair it with an AI assistant and it turns into a business partner who remembers every tract, every county office, every timber buyer, and every lesson you paid for.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="land-second-brain-starter.md" download>Download the AI starter file</a>
+    <a class="btn btn-ghost" href="#start">How to start in an afternoon</a>
+  </div>
+</div>
+
+<section class="first" aria-labelledby="what">
+  <div class="wrap split">
+    <div>
+      <p class="kicker">What it is</p>
+      <h2 id="what">Notes that remember for you</h2>
+      <p>The tool is <a href="https://obsidian.md" rel="noopener">Obsidian</a>, a free notes app. Every note is an ordinary text file in a folder you own. No subscription or cloud lock-in is required, and it still opens in twenty years.</p>
+      <p>What makes it a <em>brain</em> instead of a filing cabinet is the links. When you type <span class="wl">[[Ware County]]</span> inside a note about a tract, the two notes are connected. Later the Ware County note shows every tract, contact and permit that ever touched it, without any re-filing.</p>
+      <p>The AI piece is newer. Assistants like Claude can now read and write the folder directly. You drop in raw material such as a voice memo, a cruise report, a closing statement or a photo of a plat. The AI files it, links it, and answers questions from it later, citing the note it got the answer from.</p>
+    </div>
+    <pre class="tree" aria-label="Example folder layout"><b>Land Brain/</b>
+├─ <b>inbox/</b>          <i># drop anything here</i>
+│   ├─ cruise-report-hwy82.pdf
+│   └─ call-notes-surveyor.md
+├─ <b>tracts/</b>         <i># one note per property</i>
+│   ├─ Hwy 82 Tract (Ware).md
+│   └─ Satilla River 140 ac.md
+├─ <b>people/</b>         <i># buyers, foresters, surveyors</i>
+├─ <b>places/</b>         <i># counties, offices, mills</i>
+├─ <b>playbooks/</b>      <i># how we do things</i>
+│   ├─ Due diligence checklist.md
+│   └─ Splitting a tract into lots.md
+├─ <b>lessons/</b>        <i># what we'd do differently</i>
+└─ index.md        <i># the AI keeps this map</i></pre>
+  </div>
+</section>
+
+<section aria-labelledby="why">
+  <div class="wrap">
+    <p class="kicker">Why anyone should have one</p>
+    <h2 id="why">Benefits that compound</h2>
+    <p class="lead">Most people's knowledge sits in their head, their texts and a truck full of folders. A second brain collects it in one place that you can search, and it gets more valuable with every note.</p>
+    <div class="grid g3" style="margin-top:28px">
+      <div class="card"><span class="n">01</span><h3>Capture once, use forever</h3><p>You write the lesson down the day you learn it. Next year's deal starts from what you know rather than from a blank page.</p></div>
+      <div class="card"><span class="n">02</span><h3>An AI that knows your business</h3><p>A generic chatbot knows timber in general. Yours also knows your buyers, your margins, your counties and the ways your past deals went sideways.</p></div>
+      <div class="card"><span class="n">03</span><h3>Answers you can check</h3><p>Each answer points back to the note and source it came from. Because you can check it, you can trust it.</p></div>
+      <div class="card"><span class="n">04</span><h3>You own it</h3><p>The notes are plain files on your machine. You can switch AI tools any time and the knowledge comes with you.</p></div>
+      <div class="card"><span class="n">05</span><h3>Easy to hand off</h3><p>A partner, a new hire or your family can open the folder and see how the business runs. Nothing is lost if one person is out.</p></div>
+      <div class="card"><span class="n">06</span><h3>Patterns show up</h3><p>Once ten tracts sit side by side you start to see which counties move fast, which buyers pay best and how big a lot sells quickest.</p></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="land">
+  <div class="wrap">
+    <p class="kicker">For a timber-and-land business</p>
+    <h2 id="land">Every stage of the deal gets a memory</h2>
+    <p class="lead">Buying timbered tracts in southeast Georgia, harvesting, then cutting the land into plots is a long, multi-year process with a lot of different people involved. Details are easy to lose along the way. Here's what the second brain holds at each stage.</p>
+    <ol class="flow">
+      <li><h3>Find</h3><p>Leads, sellers, asking price, why it's for sale, first impressions from the drive-by.</p></li>
+      <li><h3>Diligence</h3><p>Title, survey, access, wetlands, flood zone, soils, any conservation-use covenant, the timber cruise.</p></li>
+      <li><h3>Close</h3><p>Final numbers, the attorney, the lender, the documents, and what surprised you.</p></li>
+      <li><h3>Harvest</h3><p>Logging contractor, timber buyer, mill tickets, county notices, best-practice notes and how it really went.</p></li>
+      <li><h3>Divide</h3><p>Surveyor, county planning and plat approval, road frontage, perc tests, lot lines and pricing.</p></li>
+      <li><h3>Sell</h3><p>Listings, buyer inquiries, offers, terms, what sold fast and what sat on the market.</p></li>
+    </ol>
+
+    <div class="split" style="margin-top:48px">
+      <div class="note" role="figure" aria-label="Example tract note">
+        <div class="note-bar"><span></span><span></span><span></span>&nbsp; tracts / Hwy 82 Tract (Ware).md</div>
+        <div class="note-body">
+          <h4>Hwy 82 Tract — example</h4>
+          <div class="meta">status: harvest complete · acres: 212 · county: [[Ware County]]</div>
+          <ul>
+            <li>Bought from <span class="wl">[[Seller — Smith family]]</span>; closing via <span class="wl">[[Closing attorney]]</span></li>
+            <li>Cruise by <span class="wl">[[Consulting forester]]</span>; pine pulpwood and chip-n-saw mix</li>
+            <li>Harvest sold to <span class="wl">[[Timber buyer A]]</span>; mill tickets in <code>inbox/</code></li>
+            <li>Planned split: 8 lots, 10–40 ac → see <span class="wl">[[Splitting a tract into lots]]</span></li>
+          </ul>
+          <p class="muted" style="margin:0;font-size:.88rem"><strong>Lesson:</strong> the road-frontage question held up plat approval by six weeks → added to <span class="wl">[[Due diligence checklist]]</span>.</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:1.45rem;font-weight:650">Questions it can answer</h3>
+        <p class="muted">These are real things you could type to your AI once a few deals are in the brain.</p>
+        <div class="qa">
+          <div class="q"><strong>"What did we net per acre on the last three tracts, harvest plus lot sales?"</strong><span>It pulls the numbers from each tract note and shows its work.</span></div>
+          <div class="q"><strong>"Which county took longest to approve a plat, and why?"</strong><span>It reads the Divide notes across every deal.</span></div>
+          <div class="q"><strong>"This new tract has a creek through it. What did we learn last time?"</strong><span>It finds the lessons and checklist items about streamside buffers and access.</span></div>
+          <div class="q"><strong>"Draft a lot listing like the one that sold in two weeks."</strong><span>It starts from your best example rather than a generic template.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="start-h" id="start">
+  <div class="wrap split">
+    <div>
+      <p class="kicker">Getting started</p>
+      <h2 id="start-h">Start in an afternoon</h2>
+      <p class="muted">You don't need to be technical. Start small, with one tract you know well.</p>
+      <ol class="steps">
+        <li><div><h3>Install Obsidian</h3><p>Free from <a href="https://obsidian.md" rel="noopener">obsidian.md</a>. Create a new vault, which is just a folder, and call it something like <code>Land Brain</code>.</p></div></li>
+        <li><div><h3>Pick an AI that can work with files</h3><p>The best fit is an assistant that can read and write the folder itself, like Claude Code or the Claude desktop app with folder access. A regular chat AI also works if you paste notes in and copy its answers back.</p></div></li>
+        <li><div><h3>Give it the starter file</h3><p>Download the starter file below, put it in the vault, and tell the AI: <em>"Read land-second-brain-starter.md and set me up."</em> It will interview you, build the folders and templates, and write your first notes.</p></div></li>
+        <li><div><h3>Feed it one real deal</h3><p>Drop in everything you have on a single tract: notes, PDFs, photos, a voice memo. Ask the AI to file it. Then ask it a question and check the answer.</p></div></li>
+        <li><div><h3>Make it a habit</h3><p>After any call, site visit or closing, spend two minutes dropping a note in the inbox. Once a week, ask the AI to file the inbox and tell you what it learned.</p></div></li>
+      </ol>
+    </div>
+    <div class="callout">
+      <h3>Good habits from the start</h3>
+      <ul>
+        <li><strong>The AI organizes; you decide.</strong> Treat its notes as drafts until you've checked them, especially numbers.</li>
+        <li><strong>It is not your attorney, forester or CPA.</strong> It helps you remember what they told you and what to ask them next time. Covenants, taxes, permits and plat rules change and differ by county, so confirm with the professional.</li>
+        <li><strong>Keep sensitive files private.</strong> Bank details, IDs and anything confidential from a seller don't belong in the notes, and you don't need them there.</li>
+        <li><strong>Back it up.</strong> It's a folder. Copy it to an external drive, or use Obsidian Sync or iCloud.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="dl">
+  <div class="wrap">
+    <div class="download">
+      <div>
+        <h2 id="dl">The AI starter file</h2>
+        <p>A single Markdown file you hand to your AI. It explains the system, interviews you about your business, sets up the folders and templates for tracts, harvests and lot sales, and keeps the rules that make answers trustworthy.</p>
+      </div>
+      <a class="btn" href="land-second-brain-starter.md" download>Download .md</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Made by a friend who runs their own second brain this way. Obsidian is free at obsidian.md and is not affiliated with this page. Nothing here is legal, tax or forestry advice.
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeToggle'), key='sb-theme';
+  try{var s=localStorage.getItem(key); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  function cur(){var t=root.getAttribute('data-theme'); if(t) return t; return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+  function label(){btn.textContent=cur()==='dark'?'Light':'Dark';}
+  label();
+  btn.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark'; root.setAttribute('data-theme',n); try{localStorage.setItem(key,n);}catch(e){} label();});
+})();
+</script>
+</body>
+</html>
